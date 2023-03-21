@@ -1,6 +1,33 @@
+import React, { useState, useEffect } from "react";
 import { StatPreview } from '../cmps/one-shoe-stat-preview.jsx'
+import * as XLSX from "xlsx";
+import dataFile from '../assets/data.xlsx'
 
 export function OneShoeStats() {
+    const [data, setData] = useState(null)
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(dataFile)
+            const blob = await response.blob()
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                const binaryStr = event.target.result;
+                const workbook = XLSX.read(binaryStr, { type: "binary" });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                setData(rows)
+            }
+            reader.readAsBinaryString(blob);
+        }
+
+        fetchData()
+    }, [])
+  
+
+
+
+
     let stats =
         [
             { type: 'סוג פעילות', id: 1, firstOption: 'טיולים ושטח', secondOption: 'ריצה', thirdOption: 'לכל היום' },
