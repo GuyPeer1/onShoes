@@ -1,0 +1,20 @@
+.stat-preview {
+    .stat-type {
+        text-align: center;
+        padding: em(8px);
+    }
+
+    .bars {
+        display: flex;
+        justify-content: space-between;
+        font-size: em(12px);
+        text-align: center;
+
+        .bar {
+            width: 100px;
+            height: 5px;
+            border: 1px solid white;
+            border-radius: 16px;
+        }
+    }
+}

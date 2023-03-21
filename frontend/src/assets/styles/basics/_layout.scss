@@ -1,0 +1,31 @@
+body {
+    background-image: url(../../img/bg.jpg);
+    background-size: cover;
+}
+.main-layout {
+
+    .one-shoe-page {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+
+        font-family: sans-serif;
+        font-size: em(24px);
+        text-align: right;
+
+        // @include for-narrow-layout {
+        //     grid-template-columns:
+        //         minmax(20px, 1fr) minmax(auto, $break-narrow) minmax(20px, 1fr);
+        // }
+
+        // @include for-normal-layout {
+        //     grid-template-columns:
+        //         minmax(20px, 1fr) minmax(auto, $break-normal) minmax(20px, 1fr);
+        // }
+
+        // @include for-wide-layout {
+        //     grid-template-columns:
+        //         minmax(20px, 1fr) minmax(auto, $break-wide) minmax(20px, 1fr);
+        // }
+
+    }
+}

@@ -1,0 +1,14 @@
+.one-shoe-stats{
+    grid-column: 1;
+    background-color: rgba(123, 186, 221, 0.9);
+    color:white;
+    min-width: 500px;
+    border-radius: 16px;
+    margin: 32px;
+
+    .head {
+    padding: em(8px);
+    text-align: left;
+    }
+
+}
