@@ -1,3 +1,32 @@
-.one-shoe-suits{
+.one-shoe-suits {
     grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(123, 186, 221, 0.8);
+    border-radius: 16px;
+    text-align: center;
+    margin: 32px;
+    color: white;
+
+    .logo-img {
+        width: 80px;
+        align-self: flex-end;
+        padding: 16px;
+    }
+
+    .main-txt {
+        padding: 32px 64px;
+        font-weight: 600;
+    }
+
+    .runner-img {
+        margin-top: auto;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+
+    .orange-img {
+        width: 80px;
+        align-self: center;
+    }
 }
