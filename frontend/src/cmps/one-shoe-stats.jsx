@@ -4,29 +4,32 @@ import * as XLSX from "xlsx";
 import dataFile from '../assets/data.xlsx'
 
 export function OneShoeStats() {
-    const [data, setData] = useState(null)
+    const [currentRow, setCurrentRow] = useState(null)
+    const RFID = '303246280B06EFC0000002E9'
     
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(dataFile)
-            const blob = await response.blob()
-            const reader = new FileReader()
-            reader.onload = (event) => {
-                const binaryStr = event.target.result;
-                const workbook = XLSX.read(binaryStr, { type: "binary" });
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                setData(rows)
-            }
-            reader.readAsBinaryString(blob);
-        }
-
-        fetchData()
+        loadData()
     }, [])
-  
 
+    async function loadData() {
+        const response = await fetch(dataFile)
+        const blob = await response.blob()
+        const reader = new FileReader()
+        reader.onload = (event) => {
+            const binaryStr = event.target.result;
+            const workbook = XLSX.read(binaryStr, { type: "binary" })
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+            setCurrentRow(getCurrentRow(rows))
+        }
+        reader.readAsBinaryString(blob)
+    }
 
-
+    function getCurrentRow(rows) {
+        const rfidColumnIndex = rows[0].indexOf('rfid')
+        const filteredRow = rows.find(row => row[rfidColumnIndex] === RFID)
+        return filteredRow
+    }
 
     let stats =
         [
