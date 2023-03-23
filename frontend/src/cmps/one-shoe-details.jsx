@@ -7,6 +7,7 @@ export function OneShoeDetails({currShoe}) {
     const descIndex = currShoe[0].indexOf('desc')
     const desc = currShoe[1][descIndex]
 
+
     return (
         <section className="one-shoe-details">
             <img className="shoe-img" src={imgUrl} />
@@ -15,7 +16,7 @@ export function OneShoeDetails({currShoe}) {
                 <span className="main-info">
                     {desc}
                 </span>
-            </div>
+            </div>``
         </section >
     )
 }

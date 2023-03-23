@@ -10,8 +10,8 @@ export function OneShoePage() {
     const [currShoe, setCurrentShoe] = useState(null)
     const [currStats, setCurrStats] = useState(null)
     const [isCurrShoeUpdated, setIsCurrShoeUpdated] = useState(false)
-    const RFID = '303246280B06EFC0000002E9'
-    // const RFID = '303246280b03e1000098ba83'
+    // const RFID = '303246280B06EFC0000002E9'
+    const RFID = '303246280b03e1000098ba83'
 
     useEffect(() => {
         async function fetchData() {
