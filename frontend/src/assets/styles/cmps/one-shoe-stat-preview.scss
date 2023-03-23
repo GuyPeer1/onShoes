@@ -12,11 +12,16 @@
 
         .duo {
             padding: em(11px);
+
             .bar {
                 width: 100px;
                 height: 5px;
                 border: 1px solid white;
                 border-radius: 16px;
+
+                &.chosen {
+                    background-color: aqua;
+                }
             }
         }
     }
