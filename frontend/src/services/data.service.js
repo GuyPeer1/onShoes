@@ -1,10 +1,6 @@
 
-import { httpService } from './http.service.js'
-import { utilService } from './util.service.js'
 import * as XLSX from "xlsx"
 import dataFile from '../assets/data.xlsx'
-
-const STORAGE_KEY = 'data'
 
 export const dataService = {
     loadData,

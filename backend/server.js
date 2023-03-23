@@ -3,6 +3,7 @@ const cors = require('cors')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const rfidService = require('./services/rfid.service.js')
+
 const app = express()
 const http = require('http').createServer(app)
 
@@ -21,12 +22,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const entityRoutes = require('./api/entity/entity.routes')
+const {setupSocketAPI} = require('./services/socket.service')
+
 
 // routes
 const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware')
 app.all('*', setupAsyncLocalStorage)
 
 app.use('/api/entity', entityRoutes)
+
+setupSocketAPI(http)
+
 
 app.get('/**', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))

@@ -3,6 +3,7 @@ import { OneShoeStats } from '../cmps/one-shoe-stats.jsx'
 import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
+import { socketService } from '../services/socket.service'
 
 
 export function OneShoePage() {
@@ -27,6 +28,13 @@ export function OneShoePage() {
             addCurrShoeProps()
         }
     }, [currShoe])
+
+    useEffect(() => {
+        socketService.emit('check')
+        socketService.on('rfid-placed', data => {
+            console.log(data)
+        })
+    },[])
 
 
     function getCurrentShoe(rows) {
