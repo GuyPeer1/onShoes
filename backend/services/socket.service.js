@@ -13,7 +13,7 @@ function setupSocketAPI(http) {
             logger.info(`Socket disconnected [id: ${socket.id}]`)
         })
         socket.on('check', data => {
-            console.log('hey')
+            // console.log('hey')
         })
     })
 }
