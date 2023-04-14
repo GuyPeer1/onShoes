@@ -3,6 +3,7 @@ import { StatPreview } from '../cmps/one-shoe-stat-preview.jsx'
 
 
 export function OneShoeStats({currStats, currShoe}) {
+    console.log(currShoe)
    
     return (
         <section className="one-shoe-stats">

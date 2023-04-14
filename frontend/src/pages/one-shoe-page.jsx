@@ -4,7 +4,6 @@ import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
 import { socketService } from '../services/socket.service'
-import debounce from 'lodash/debounce'
 
 
 export function OneShoePage() {
@@ -13,11 +12,10 @@ export function OneShoePage() {
     const [currShoe, setCurrentShoe] = useState(null)
     const [currStats, setCurrStats] = useState(null)
     const [isCurrShoeUpdated, setIsCurrShoeUpdated] = useState(false)
-    // const RFID = '303246280B06EFC0000002E9'
-    const [RFID, setRFID] = useState("303246280b03e1000098ba83")
+    const [RFID, setRFID] = useState("303246280B06EFC0000002E9")
     const [newRFID, setNewRFID] = useState('')
 
-    console.log('rfid', RFID)
+    const [tempShoeCode, setTempShoeCode] = useState(true)
 
     useEffect(() => {
         async function fetchData() {
@@ -25,7 +23,7 @@ export function OneShoePage() {
             setCurrentShoe(getCurrentShoe(rows))
         }
         fetchData()
-    }, [])
+    }, [RFID])
 
     useEffect(() => {
         if (currShoe && !isCurrShoeUpdated) {
@@ -41,14 +39,17 @@ export function OneShoePage() {
     //     })
     // }, [])
 
-    const handleRFIDChange = debounce((value) => {
+    function handleRFIDChange(value) {
         if (value.length === 24) {
-            setRFID(value)
-            console.log('set with new ',value)
-            setNewRFID('')
+          setRFID(value)
+          setNewRFID('')
+          //TEMP UNTIL WE WILL FIX THE BARCODE TO RFID HANDELING:
+          addCurrShoeProps()
+          if (tempShoeCode) setRFID('303246280b03e1000098ba83')
+          else setRFID('303246280B06EFC0000002E9')
+          setTempShoeCode(!tempShoeCode)
         }
-    }, 500)
-
+      }
 
     function getCurrentShoe(rows) {
         const rfidColumnIndex = rows[0].indexOf('rfid')
