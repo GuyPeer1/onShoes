@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { OneShoeStats } from '../cmps/one-shoe-stats.jsx'
 import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
 import { socketService } from '../services/socket.service'
+import debounce from 'lodash/debounce'
 
 
 export function OneShoePage() {
 
+    const inputRef = useRef(null)
     const [currShoe, setCurrentShoe] = useState(null)
     const [currStats, setCurrStats] = useState(null)
     const [isCurrShoeUpdated, setIsCurrShoeUpdated] = useState(false)
     // const RFID = '303246280B06EFC0000002E9'
-    const RFID = '303246280b03e1000098ba83'
+    const [RFID, setRFID] = useState("303246280b03e1000098ba83")
+    const [newRFID, setNewRFID] = useState('')
+
+    console.log('rfid', RFID)
 
     useEffect(() => {
         async function fetchData() {
@@ -29,12 +34,20 @@ export function OneShoePage() {
         }
     }, [currShoe])
 
-    useEffect(() => {
-        socketService.emit('check')
-        socketService.on('rfid-placed', data => {
-            console.log(data)
-        })
-    },[])
+    // useEffect(() => {
+    //     socketService.emit('check')
+    //     socketService.on('rfid-placed', data => {
+    //         console.log(data)
+    //     })
+    // }, [])
+
+    const handleRFIDChange = debounce((value) => {
+        if (value.length === 24) {
+            setRFID(value)
+            console.log('set with new ',value)
+            setNewRFID('')
+        }
+    }, 500)
 
 
     function getCurrentShoe(rows) {
@@ -106,9 +119,22 @@ export function OneShoePage() {
                 <>
                     <OneShoeStats currStats={currStats} currShoe={currShoe} />
                     <OneShoeDetails currShoe={currShoe} />
-                    <OneShoeSuits currShoe={currShoe}/>
+                    <OneShoeSuits currShoe={currShoe} />
+                    <input
+                        type="text"
+                        className="rfid-input"
+                        ref={inputRef}
+                        autoFocus
+                        onChange={(event) => setNewRFID(event.target.value)}
+                        value={newRFID}
+                        onKeyUp={(event) => handleRFIDChange(event.target.value)}
+                        style={{ opacity: 0 }}
+
+                    />
+
                 </>
             )}
         </section>
     )
 }
+

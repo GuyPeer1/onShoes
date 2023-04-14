@@ -3,7 +3,6 @@ import orangePhoto from '../assets/img/orange.png'
 import runnerPhoto from '../assets/img/runner.png'
 
 export function OneShoeSuits({currShoe}) {
-    console.log(currShoe)
     return (
         <section className="one-shoe-suits">
             <img className="logo-img" src={logoPhoto} alt="logo" />
