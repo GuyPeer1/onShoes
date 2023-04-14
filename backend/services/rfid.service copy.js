@@ -1,28 +1,38 @@
-const HID = require('node-hid');
 
-const vendorId = 1534;
-const productId = 4112;
-const socketService = require('../services/socket.service.js')
+const usb = require('usb');
 
-HID.devices().forEach((device) => {
-    if (device.vendorId === vendorId && device.productId === productId) {
-      const hidDevice = new HID.HID(device.path);
-      console.log('RFID device connected.');
-  
-      hidDevice.on('data', (data) => {
-        const tagCode = data.toString('utf8').trim();
-        console.log('Scanned RFID code:', tagCode);
-        // send the scanned code to the frontend using socketService.emit()
-        socketService.emit('rfid-scanned', { code: tagCode });
-      });
-  
-      hidDevice.on('error', (error) => {
-        console.error('RFID device error:', error);
-      });
-  
-      process.on('exit', () => {
-        hidDevice.close();
-        console.log('RFID device disconnected.');
-      });
-    }
-  });
+const vendorId = 4292
+const productId = 60000
+
+// Find the device with the vendor ID and product ID of your RFID reader
+const device = usb.findByIds(vendorId, productId)
+
+if (device) {
+  console.log(device)
+  device.open()
+
+  // Claim the interface used by your RFID reader
+  // const interfaceNum = 0
+  // device.interface(interfaceNum).claim()
+
+//   // Find the endpoint used by your RFID reader
+//   const endpointIn = device.interface(interfaceNum).endpoint(0)
+
+//   // Start listening for RFID events
+//   endpointIn.on('data', data => {
+//     console.log(`RFID data received: ${data}`);
+//     // Handle the RFID data here
+//   });
+
+//   // Handle errors that occur while reading data from the endpoint
+//   endpointIn.on('error', err => {
+//     console.error('Error reading data from endpoint: ', err)
+//   });
+
+//   // Handle errors that occur while opening the device or claiming the interface
+//   device.on('error', err => {
+//     console.error('Error opening device or claiming interface: ', err)
+//   })
+// } else {
+//   console.error('RFID reader not found')
+}

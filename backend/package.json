@@ -19,7 +19,9 @@
         "express": "^4.17.1",
         "mongodb": "^3.2.7",
         "node-hid": "^2.1.2",
-        "socket.io": "^4.2.0"
+        "serialport": "^10.5.0",
+        "socket.io": "^4.2.0",
+        "usb": "^2.9.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.20"
