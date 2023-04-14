@@ -1,9 +1,9 @@
-const { SerialPort } = require('serialport')
+// const { SerialPort } = require('serialport')
 
-const serialport = new SerialPort({ path: '/COM4', baudRate: 9600 })
-serialport.on('open', () => {
-  console.log('Serial port opened')
-})
+// const serialport = new SerialPort({ path: '/COM4', baudRate: 9600 })
+// serialport.on('open', () => {
+//   console.log('Serial port opened')
+// })
 
 // serialport.on('data', data => {
 //   console.log(`Data received: ${data}`);
