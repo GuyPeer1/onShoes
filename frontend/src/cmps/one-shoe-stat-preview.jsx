@@ -1,7 +1,7 @@
 export function StatPreview({ currStat }) {
 
     const Bar = ({ chosen }) => <div className={`bar ${chosen ? "chosen" : ""}`} />
-    
+
     return (
         <section className="stat-preview">
             <div className="stat-type">{currStat.type}</div>

@@ -9,7 +9,8 @@ export function OneShoeSuits({currShoe}) {
             <img className="orange-img" src={orangePhoto} alt="orange"/>
             <span className="info-he">:מתאים ל</span>
 
-            <span className="main-txt">ריצות כביש, אימונים, תחרות, ריצות קצרות עד מרתון</span>
+            <span className="main-txt">{currShoe[1][4]}</span>
+            <span className="main-txt">{currShoe[1][5]}</span>
             <img className="orange-img" src={orangePhoto} alt="orange" />
 
             <span className="video-txt">Video clip</span>

@@ -1,16 +1,7 @@
-// const { SerialPort } = require('serialport')
+const epcTds = require('epc-tds');
+var epc = epcTds.valueOf("303246280B066F0000989925"); // SGTIN-96
 
-// const serialport = new SerialPort({ path: '/COM4', baudRate: 9600 })
-// serialport.on('open', () => {
-//   console.log('Serial port opened')
-// })
+console.log("Barcode: " + epc.toBarcode()); // sgtin
 
-// serialport.on('data', data => {
-//   console.log(`Data received: ${data}`);
-//   // Handle the data received here
-// })
 
-// serialport.on('error', err => {
-//   console.error('Serial port error: ', err);
-// })
 

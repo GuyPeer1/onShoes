@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react"
 import { OneShoeStats } from '../cmps/one-shoe-stats.jsx'
 import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
 import { socketService } from '../services/socket.service'
-
+import { generateBarcode } from "../services/rfid.service.js"
 
 export function OneShoePage() {
 
@@ -14,8 +14,6 @@ export function OneShoePage() {
     const [isCurrShoeUpdated, setIsCurrShoeUpdated] = useState(false)
     const [RFID, setRFID] = useState("303246280B06EFC0000002E9")
     const [newRFID, setNewRFID] = useState('')
-
-    const [tempShoeCode, setTempShoeCode] = useState(true)
 
     useEffect(() => {
         async function fetchData() {
@@ -43,17 +41,15 @@ export function OneShoePage() {
         if (value.length === 24) {
           setRFID(value)
           setNewRFID('')
-          //TEMP UNTIL WE WILL FIX THE BARCODE TO RFID HANDELING:
           addCurrShoeProps()
-          if (tempShoeCode) setRFID('303246280b03e1000098ba83')
-          else setRFID('303246280B06EFC0000002E9')
-          setTempShoeCode(!tempShoeCode)
         }
       }
 
     function getCurrentShoe(rows) {
-        const rfidColumnIndex = rows[0].indexOf('rfid')
-        const filteredRow = rows.find(row => row[rfidColumnIndex] === RFID)
+        const columnIndex = rows[0].indexOf('barcode')
+        const filteredRow = rows.find(row => row[columnIndex] === +generateBarcode(RFID))
+        console.log(+generateBarcode(RFID))
+        console.log(filteredRow)
         return [rows[0], filteredRow]
     }
 
@@ -107,7 +103,7 @@ export function OneShoePage() {
 
     let stats =
         [
-            { type: 'סוג פעילות', id: 1, firstOption: 'טיולים ושטח', secondOption: 'ריצה', thirdOption: 'לכל היום' },
+            { type: 'סוג פעילות', id: 1, firstOption: 'תמיכה ונוחות', secondOption: 'ריצה ואימון', thirdOption: 'אופנה ויום יום' },
             { type: 'משטח', id: 2, firstOption: 'שטח', secondOption: 'אימון בבית', thirdOption: 'כביש' },
             { type: 'מרחק ריצה', id: 3, firstOption: 'ארוך', secondOption: 'בינוני', thirdOption: 'קצר' },
             { type: 'שיכוך', id: 4, firstOption: 'מקסימלי ', secondOption: 'בינוני', thirdOption: 'קל' },
