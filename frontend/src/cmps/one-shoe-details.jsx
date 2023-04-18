@@ -3,10 +3,9 @@ export function OneShoeDetails({currShoe}) {
     const imgUrl = currShoe[1][imgUrlIndex]
 
     const descIndex = currShoe[0].indexOf('desc')
-    const typeIndex = currShoe[0].indexOf('type')
+    const typeIndex = currShoe[0].indexOf('דגם')
     const desc = currShoe[1][descIndex]
     const type = currShoe[1][typeIndex]
-
 
     return (
         <section className="one-shoe-details">

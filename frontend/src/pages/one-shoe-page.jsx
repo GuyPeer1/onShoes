@@ -65,10 +65,14 @@ export function OneShoePage() {
         const distanceIndex = headers.indexOf('running_distance')
         const dampingIndex = headers.indexOf('damping')
         const compIndex = headers.indexOf('comp')
-
+        let distanceWord
         const activityValue = currShoe[1][activityIndex]
         const surfaceValue = currShoe[1][surfaceIndex]
         const distanceValue = currShoe[1][distanceIndex]
+        if (distanceValue === '42.2K') distanceWord = 'ארוך'
+        else if (distanceValue === '21.1K') distanceWord = 'בינוני'
+        else if (distanceValue === '10K') distanceWord = 'קצר'
+
         const dampingValue = currShoe[1][dampingIndex]
         const compValue = currShoe[1][compIndex]
 
@@ -87,7 +91,7 @@ export function OneShoePage() {
                 case 'מרחק ריצה':
                     return {
                         ...stat,
-                        chosen: distanceValue
+                        chosen: distanceWord
                     }
                 case 'שיכוך':
                     return {
