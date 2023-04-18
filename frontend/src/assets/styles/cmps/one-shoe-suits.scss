@@ -5,7 +5,8 @@
     background-color: rgba(123, 186, 221, 0.8);
     border-radius: 16px;
     text-align: center;
-    margin: 32px;
+    margin-left: em(32px);
+    margin-right: em(32px);
     color: white;
 
     .logo-img {
@@ -15,12 +16,15 @@
     }
 
     .main-txt {
-        padding: 32px 64px;
         font-weight: 600;
+        padding: em(8px) em(32px);
+
+        @media (min-width: 1600px) {
+            padding: em(32px) em(64px);
+        }
     }
 
     .runner-img {
-        margin-top: auto;
         border-bottom-left-radius: 16px;
         border-bottom-right-radius: 16px;
     }

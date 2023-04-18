@@ -1,7 +1,10 @@
 .stat-preview {
     .stat-type {
         text-align: center;
-        padding: em(8px);
+        padding: em(6px);
+        @media (min-width:1600px) {
+            padding: em(8px);
+        }
     }
 
     .bars {
@@ -11,10 +14,16 @@
         text-align: center;
 
         .duo {
-            padding: em(11px);
-
+            padding: 0;
+            @media (min-width:1600px) {
+                padding:em(11px);
+            }
             .bar {
                 width: 50px;
+                @media (min-width:1600px) {
+                    width:100px;
+                }
+
                 height: 5px;
                 border: 1px solid white;
                 border-radius: 16px;
@@ -25,4 +34,6 @@
             }
         }
     }
+
+
 }

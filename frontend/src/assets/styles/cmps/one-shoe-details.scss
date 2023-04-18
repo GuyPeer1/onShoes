@@ -6,8 +6,7 @@
     .shoe-img {
         align-self: center;
         justify-content: center;
-        width: 500px;
-        padding: 64px;
+        width: 400px;
     }
 
     .shoe-info {
@@ -15,6 +14,9 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        direction: rtl;
+        transform: translateY(-80px);
+
 
         .type {
             color: darkorange;

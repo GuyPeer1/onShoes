@@ -6,7 +6,10 @@
     margin: 32px;
 
     .head {
-    padding: em(8px);
+    padding: em(4px);
+    @media (min-width: 1600px) {
+        padding: em(8px);
+    }
     text-align: left;
     }
 
