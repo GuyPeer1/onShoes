@@ -7,24 +7,30 @@ import { socketService } from '../services/socket.service'
 import { generateBarcode } from "../services/rfid.service.js"
 
 export function OneShoePage() {
+    //The app first render will be with the next RFID:
+    const [RFID, setRFID] = useState("303246280b03f780000003a0")
+    const [newRFID, setNewRFID] = useState('')
 
+    //focus on the hidden input for auto scan RFID
     const inputRef = useRef(null)
+
     const [currShoe, setCurrentShoe] = useState(null)
     const [currStats, setCurrStats] = useState(null)
     const [isCurrShoeUpdated, setIsCurrShoeUpdated] = useState(false)
-    const [RFID, setRFID] = useState("303246280B06EFC0000002E9")
-    const [newRFID, setNewRFID] = useState('')
+
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         async function fetchData() {
             const rows = await dataService.loadData()
+            setLoading(false)
             setCurrentShoe(getCurrentShoe(rows))
         }
         fetchData()
     }, [RFID])
 
     useEffect(() => {
-        if (currShoe && !isCurrShoeUpdated) {
+        if (!loading && currShoe && !isCurrShoeUpdated) {
             setIsCurrShoeUpdated(true)
             addCurrShoeProps()
         }
@@ -39,17 +45,16 @@ export function OneShoePage() {
 
     function handleRFIDChange(value) {
         if (value.length === 24) {
-          setRFID(value)
-          setNewRFID('')
-          addCurrShoeProps()
+            setRFID(value)
+            setNewRFID('')
+            addCurrShoeProps()
         }
-      }
+    }
 
     function getCurrentShoe(rows) {
         const columnIndex = rows[0].indexOf('barcode')
         const filteredRow = rows.find(row => row[columnIndex] === +generateBarcode(RFID))
         console.log(+generateBarcode(RFID))
-        console.log(filteredRow)
         return [rows[0], filteredRow]
     }
 
