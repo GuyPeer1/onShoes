@@ -3,7 +3,6 @@ import { OneShoeStats } from '../cmps/one-shoe-stats.jsx'
 import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
-import { socketService } from '../services/socket.service'
 import { generateBarcode } from "../services/rfid.service.js"
 
 export function OneShoePage() {
@@ -35,13 +34,6 @@ export function OneShoePage() {
             addCurrShoeProps()
         }
     }, [currShoe])
-
-    // useEffect(() => {
-    //     socketService.emit('check')
-    //     socketService.on('rfid-placed', data => {
-    //         console.log(data)
-    //     })
-    // }, [])
 
     function handleRFIDChange(value) {
         if (value.length === 24) {
@@ -126,6 +118,7 @@ export function OneShoePage() {
                     <OneShoeStats currStats={currStats} currShoe={currShoe} />
                     <OneShoeDetails currShoe={currShoe} />
                     <OneShoeSuits currShoe={currShoe} />
+                    Paste RFID CODE HERE:
                     <input
                         type="text"
                         className="rfid-input"
@@ -134,7 +127,7 @@ export function OneShoePage() {
                         onChange={(event) => setNewRFID(event.target.value)}
                         value={newRFID}
                         onKeyUp={(event) => handleRFIDChange(event.target.value)}
-                        style={{ opacity: 0 }}
+                        style={{ opacity: 1 }}
 
                     />
 
