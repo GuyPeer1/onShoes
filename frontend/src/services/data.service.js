@@ -40,7 +40,6 @@ async function loadData() {
     const shoe = {info: [data[0], filteredRow], stats: ''}
     shoe.stats = getShoeStats(shoe.info)
     return shoe
-    // return [data[0], filteredRow]
 }
   
 function getShoeStats(shoeInfo) {

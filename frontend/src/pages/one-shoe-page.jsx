@@ -8,12 +8,9 @@ import { socketService } from '../services/socket.service'
 export function OneShoePage() {
     //The app first render will be with the next RFID:
     const [RFID, setRFID] = useState("303246280b03f780000003a0")
-    const [newRFID, setNewRFID] = useState('')
     const [data, setData] = useState()
 
     const [currShoe, setCurrShoe] = useState(null)
-    const [currStats, setCurrStats] = useState(null)
-
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -43,7 +40,6 @@ export function OneShoePage() {
     ///socketlistaners
     useEffect(() => {
         socketService.on('rfid', (rfidTag) => {
-            console.log('new rfid:', rfidTag)
             handleRFIDChange(rfidTag)
         })
 
@@ -51,11 +47,7 @@ export function OneShoePage() {
 
     function handleRFIDChange(value) {
         if (value.length === 24) {
-            // console.log(value)
             setRFID(value)
-            setNewRFID('')
-            const stats = dataService.getShoeStats(currShoe)
-            setCurrStats(stats)
         }
     }
 
