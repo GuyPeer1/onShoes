@@ -1,4 +1,5 @@
-const { SerialPort } = require('serialport');
+const { SerialPort } = require('serialport')
+const  socketService  = require('./socket.service.js')
 
 function readRFID() {
     const port = new SerialPort({
@@ -14,6 +15,9 @@ function readRFID() {
             const tag_id = buffer.slice(3, 15).toString('hex')
             console.log(tag_id);
             buffer = Buffer.alloc(0)
+
+            // Emit the RFID code via socket
+            socketService.emitTo({ type: 'rfid', data: tag_id })
 
             port.close(() => {
                 console.log('Port closed')

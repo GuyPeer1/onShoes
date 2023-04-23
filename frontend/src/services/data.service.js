@@ -21,12 +21,12 @@ async function loadData() {
           const worksheet = workbook.Sheets[workbook.SheetNames[0]]
           const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
           resolve(rows)
-        };
+        }
         reader.onerror = (error) => {
           reject(error)
         }
         reader.readAsBinaryString(blob)
-      });
+      })
     } catch (error) {
       console.log("Error while fetching data: ", error)
       throw error
@@ -36,27 +36,30 @@ async function loadData() {
   function getShoe(data, RFID) {
     const columnIndex = data[0].indexOf('barcode')
     const filteredRow = data.find(row => row[columnIndex] === +generateBarcode(RFID))
-    console.log(+generateBarcode(RFID))
-    return [data[0], filteredRow]
+    // console.log(+generateBarcode(RFID))
+    const shoe = {info: [data[0], filteredRow], stats: ''}
+    shoe.stats = getShoeStats(shoe.info)
+    return shoe
+    // return [data[0], filteredRow]
 }
   
-function getShoeStats(shoe) {
-  const headers = shoe[0]
+function getShoeStats(shoeInfo) {
+  const headers = shoeInfo[0]
   const activityIndex = headers.indexOf('activity')
   const surfaceIndex = headers.indexOf('surface')
   const distanceIndex = headers.indexOf('running_distance')
   const dampingIndex = headers.indexOf('damping')
   const compIndex = headers.indexOf('comp')
   let distanceWord
-  const activityValue = shoe[1][activityIndex]
-  const surfaceValue = shoe[1][surfaceIndex]
-  const distanceValue = shoe[1][distanceIndex]
+  const activityValue = shoeInfo[1][activityIndex]
+  const surfaceValue = shoeInfo[1][surfaceIndex]
+  const distanceValue = shoeInfo[1][distanceIndex]
   if (distanceValue === '42.2K') distanceWord = 'ארוך'
   else if (distanceValue === '21.1K') distanceWord = 'בינוני'
   else if (distanceValue === '10K') distanceWord = 'קצר'
 
-  const dampingValue = shoe[1][dampingIndex]
-  const compValue = shoe[1][compIndex]
+  const dampingValue = shoeInfo[1][dampingIndex]
+  const compValue = shoeInfo[1][compIndex]
 
   const updatedStats = stats.map(stat => {
       switch (stat.type) {

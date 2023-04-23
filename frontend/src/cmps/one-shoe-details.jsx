@@ -1,11 +1,12 @@
 export function OneShoeDetails({currShoe}) {
-    const imgUrlIndex = currShoe[0].indexOf('imgUrl')
-    const imgUrl = currShoe[1][imgUrlIndex]
+    const shoeInfo = currShoe.info
+    const imgUrlIndex = shoeInfo[0].indexOf('imgUrl')
+    const imgUrl = shoeInfo[1][imgUrlIndex]
 
-    const descIndex = currShoe[0].indexOf('desc')
-    const typeIndex = currShoe[0].indexOf('דגם')
-    const desc = currShoe[1][descIndex]
-    const type = currShoe[1][typeIndex]
+    const descIndex = shoeInfo[0].indexOf('desc')
+    const typeIndex = shoeInfo[0].indexOf('דגם')
+    const desc = shoeInfo[1][descIndex]
+    const type = shoeInfo[1][typeIndex]
 
     return (
         <section className="one-shoe-details">
