@@ -7,10 +7,12 @@ import { socketService } from '../services/socket.service'
 
 export function OneShoePage() {
     //The app first render will be with the next RFID:
-    const [RFID, setRFID] = useState("303246280b03f780000003a0")
     const [data, setData] = useState()
+    const [firstRfid, setFirstRfid] = useState("303246280b03f780000003a0")
+    const [secondRfid, setSecondRfid] = useState(null)
 
-    const [currShoe, setCurrShoe] = useState(null)
+    const [firstShoe, setFirstShoe] = useState(null)
+    const [secondShoe, setSecondShoe] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -19,8 +21,8 @@ export function OneShoePage() {
                 setLoading(true)
                 const data = await dataService.loadData()
                 setData(data)
-                const shoe = dataService.getShoe(data, RFID)
-                setCurrShoe(shoe)
+                const shoe = dataService.getShoe(data, firstRfid)
+                setFirstShoe(shoe)
                 setLoading(false)
             } catch (error) {
                 console.error("Error occurred while fetching data:", error)
@@ -29,49 +31,64 @@ export function OneShoePage() {
         fetchData()
     }, [])
 
-
     useEffect(() => {
-        if (!loading && currShoe) {
-            const shoe = dataService.getShoe(data, RFID)
-            if (shoe !== currShoe) setCurrShoe(shoe)
+        if (!loading && firstShoe) {
+            const shoe = dataService.getShoe(data, firstRfid)
+            if (shoe !== firstShoe) setFirstShoe(shoe)
         }
-    }, [RFID])
+        if (secondRfid !== null) {
+            const shoe = dataService.getShoe(data, secondRfid)
+            setSecondShoe(shoe)
+        }
+    }, [firstRfid, secondRfid])
 
     ///socketlistaners
     useEffect(() => {
-        socketService.on('rfid', (rfidTag) => {
-            handleRFIDChange(rfidTag)
+        socketService.on('rfid-first', (rfidTag) => {
+            handleRFIDChange(rfidTag, 'first')
+        })
+
+        socketService.on('rfid-second', (rfidTag) => {
+            handleRFIDChange(rfidTag, 'second')
         })
 
     }, [])
 
-    function handleRFIDChange(value) {
+    function handleRFIDChange(value, rfidType) {
         if (value.length === 24) {
-            setRFID(value)
+            if (rfidType === 'first') setFirstRfid(value)
+            else if (rfidType === 'second') setSecondRfid(value)
         }
     }
 
     return (
-        <section className='one-shoe-page'>
-            {currShoe && (
-                <>
-                    <OneShoeStats currShoe={currShoe} />
-                    <OneShoeDetails currShoe={currShoe} />
-                    <OneShoeSuits currShoe={currShoe} />
-                    {/* Paste RFID CODE HERE:
-                    <input
-                        type="text"
-                        className="rfid-input"
-                        autoFocus
-                        onChange={(event) => setNewRFID(event.target.value)}
-                        value={newRFID}
-                        onKeyUp={(event) => handleRFIDChange(event.target.value)}
-                        style={{ opacity: 1 }}
-
-                    /> */}
-                </>
-            )}
-        </section>
+        (firstShoe && !secondShoe) && (
+            <section className='one-shoe-page'>
+                <OneShoeStats currShoe={firstShoe} />
+                <OneShoeDetails currShoe={firstShoe} />
+                <OneShoeSuits currShoe={firstShoe} />
+            </section>
+        )
+        || (firstShoe && secondShoe) && (
+            <section className='two-shoe-page'>
+                <OneShoeStats currShoe={firstShoe} />
+                <OneShoeStats currShoe={secondShoe} />
+            </section>
+        )
     )
+
+
+
 }
 
+{/* Paste RFID CODE HERE:
+        <input
+            type="text"
+            className="rfid-input"
+            autoFocus
+            onChange={(event) => setNewRFID(event.target.value)}
+            value={newRFID}
+            onKeyUp={(event) => handleRFIDChange(event.target.value)}
+            style={{ opacity: 1 }}
+
+        /> */}

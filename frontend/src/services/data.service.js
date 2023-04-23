@@ -34,6 +34,7 @@ async function loadData() {
   }
 
   function getShoe(data, RFID) {
+    if (RFID.length !== 24) return null
     const columnIndex = data[0].indexOf('barcode')
     const filteredRow = data.find(row => row[columnIndex] === +generateBarcode(RFID))
     // console.log(+generateBarcode(RFID))
