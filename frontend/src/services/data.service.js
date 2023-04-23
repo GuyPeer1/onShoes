@@ -1,11 +1,13 @@
 
 import * as XLSX from "xlsx"
 import dataFile from '../assets/data.xlsx'
+import { generateBarcode } from "../services/rfid.service.js"
 
 export const dataService = {
     loadData,
+    getShoe,
+    getShoeStats
 }
-
 
 async function loadData() {
     try {
@@ -23,14 +25,81 @@ async function loadData() {
         reader.onerror = (error) => {
           reject(error)
         }
-        reader.readAsBinaryString(blob);
+        reader.readAsBinaryString(blob)
       });
     } catch (error) {
-      console.log("Error while fetching data: ", error);
+      console.log("Error while fetching data: ", error)
       throw error
     }
   }
+
+  function getShoe(data, RFID) {
+    const columnIndex = data[0].indexOf('barcode')
+    const filteredRow = data.find(row => row[columnIndex] === +generateBarcode(RFID))
+    console.log(+generateBarcode(RFID))
+    return [data[0], filteredRow]
+}
   
+function getShoeStats(shoe) {
+  const headers = shoe[0]
+  const activityIndex = headers.indexOf('activity')
+  const surfaceIndex = headers.indexOf('surface')
+  const distanceIndex = headers.indexOf('running_distance')
+  const dampingIndex = headers.indexOf('damping')
+  const compIndex = headers.indexOf('comp')
+  let distanceWord
+  const activityValue = shoe[1][activityIndex]
+  const surfaceValue = shoe[1][surfaceIndex]
+  const distanceValue = shoe[1][distanceIndex]
+  if (distanceValue === '42.2K') distanceWord = 'ארוך'
+  else if (distanceValue === '21.1K') distanceWord = 'בינוני'
+  else if (distanceValue === '10K') distanceWord = 'קצר'
+
+  const dampingValue = shoe[1][dampingIndex]
+  const compValue = shoe[1][compIndex]
+
+  const updatedStats = stats.map(stat => {
+      switch (stat.type) {
+          case 'סוג פעילות':
+              return {
+                  ...stat,
+                  chosen: activityValue
+              }
+          case 'משטח':
+              return {
+                  ...stat,
+                  chosen: surfaceValue
+              }
+          case 'מרחק ריצה':
+              return {
+                  ...stat,
+                  chosen: distanceWord
+              }
+          case 'שיכוך':
+              return {
+                  ...stat,
+                  chosen: dampingValue
+              }
+          case 'תחרות':
+              return {
+                  ...stat,
+                  chosen: compValue
+              }
+          default:
+              return stat
+      }
+  })
+  return updatedStats
+}
+
+let stats =
+[
+    { type: 'סוג פעילות', id: 1, firstOption: 'תמיכה ונוחות', secondOption: 'ריצה ואימון', thirdOption: 'אופנה ויום יום' },
+    { type: 'משטח', id: 2, firstOption: 'שטח', secondOption: 'אימון בבית', thirdOption: 'כביש' },
+    { type: 'מרחק ריצה', id: 3, firstOption: 'ארוך', secondOption: 'בינוני', thirdOption: 'קצר' },
+    { type: 'שיכוך', id: 4, firstOption: 'מקסימלי ', secondOption: 'בינוני', thirdOption: 'קל' },
+    { type: 'תחרות', id: 5, firstOption: 'כן', secondOption: 'לא' }
+]
 
 
 

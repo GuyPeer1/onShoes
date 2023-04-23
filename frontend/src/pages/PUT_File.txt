@@ -1,0 +1,72 @@
+PUT http://http://192.168.1.221/api/v1/files/sd/build/
+Accept: */*
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Type: multipart/form-data; boundary=123456789
+
+--123456789
+Content-Disposition: form-data; name="filename"; filename="index.html"
+Content-Type: application/octet-stream
+
+< ./index.html
+--123456789--
+ 
+ 
+###
+
+
+
+
+PUT http://http://192.168.1.221//api/v1/files/sd/
+Accept: */*
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Type: multipart/form-data; boundary=123456789
+
+--123456789
+Content-Disposition: form-data; name="filename"; filename="index.js"
+Content-Type: application/octet-stream
+
+< ./index.js
+--123456789--
+
+
+
+
+###
+
+PUT http://192.168.1.30/api/v1/files/sd/
+Accept: */*
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Type: multipart/form-data; boundary=123456789
+
+--123456789
+Content-Disposition: form-data; name="filename"; filename="styles.css"
+Content-Type: application/octet-stream
+
+< ./styles.css
+--123456789--
+
+
+
+
+
+###
+
+PUT http://192.168.1.23/api/v1/files/sd/
+Accept: */*
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Type: multipart/form-data; boundary=123456789
+
+--123456789
+Content-Disposition: form-data; name="filename"; filename="HTMLCommMedialist.brs"
+Content-Type: application/octet-stream
+
+< ./HTMLCommMedialist.brs
+--123456789--
+
+
+###
+

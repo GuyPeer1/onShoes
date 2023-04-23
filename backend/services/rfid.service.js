@@ -1,7 +1,26 @@
-const epcTds = require('epc-tds');
-var epc = epcTds.valueOf("303246280B066F0000989925"); // SGTIN-96
+const { SerialPort } = require('serialport');
 
-console.log("Barcode: " + epc.toBarcode()); // sgtin
+function readRFID() {
+    const port = new SerialPort({
+        path: '/COM6',
+        baudRate: 9600
+    })
+    let buffer = Buffer.alloc(0)
 
+    port.on('data', data => {
+        buffer = Buffer.concat([buffer, data]);
 
+        if (buffer.length >= 16) {
+            const tag_id = buffer.slice(3, 15).toString('hex')
+            console.log(tag_id);
+            buffer = Buffer.alloc(0)
 
+            port.close(() => {
+                console.log('Port closed')
+                readRFID()
+            })
+        }
+    })
+}
+
+readRFID()
