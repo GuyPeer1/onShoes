@@ -4,26 +4,22 @@ import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
 import { socketService } from '../services/socket.service'
+import { HomePage } from "./home-page.jsx"
 
 export function OneShoePage() {
     //The app first render will be with the next RFID:
     const [data, setData] = useState()
-    const [firstRfid, setFirstRfid] = useState("303246280b03f780000003a0")
-    const [secondRfid, setSecondRfid] = useState(null)
+    const [firstRfid, setFirstRfid] = useState('')
+    const [secondRfid, setSecondRfid] = useState('')
 
     const [firstShoe, setFirstShoe] = useState(null)
     const [secondShoe, setSecondShoe] = useState(null)
-    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         async function fetchData() {
             try {
-                setLoading(true)
                 const data = await dataService.loadData()
                 setData(data)
-                const shoe = dataService.getShoe(data, firstRfid)
-                setFirstShoe(shoe)
-                setLoading(false)
             } catch (error) {
                 console.error("Error occurred while fetching data:", error)
             }
@@ -32,13 +28,14 @@ export function OneShoePage() {
     }, [])
 
     useEffect(() => {
-        if (!loading && firstShoe) {
+        if (firstRfid) {
             const shoe = dataService.getShoe(data, firstRfid)
-            if (shoe !== firstShoe) setFirstShoe(shoe)
+            setFirstShoe(shoe || null)
         }
-        if (secondRfid !== null) {
+        if (secondRfid) {
             const shoe = dataService.getShoe(data, secondRfid)
-            setSecondShoe(shoe)
+            console.log(shoe)
+            setSecondShoe(shoe || null)
         }
     }, [firstRfid, secondRfid])
 
@@ -46,9 +43,11 @@ export function OneShoePage() {
     useEffect(() => {
         socketService.on('rfid-first', (rfidTag) => {
             handleRFIDChange(rfidTag, 'first')
+            console.log('first', rfidTag)
         })
 
         socketService.on('rfid-second', (rfidTag) => {
+            console.log('second', rfidTag)
             handleRFIDChange(rfidTag, 'second')
         })
 
@@ -60,8 +59,12 @@ export function OneShoePage() {
             else if (rfidType === 'second') setSecondRfid(value)
         }
     }
-
     return (
+        //Deafult: Display background movie
+        (!firstShoe && !secondShoe) && (
+            <HomePage />
+        ) ||
+        //Case 1: Only first shoe exist
         (firstShoe && !secondShoe) && (
             <section className='one-shoe-page'>
                 <OneShoeStats currShoe={firstShoe} />
@@ -69,16 +72,22 @@ export function OneShoePage() {
                 <OneShoeSuits currShoe={firstShoe} />
             </section>
         )
+        //Case 2: Only second shoe exist
+        || (!firstShoe && secondShoe) && (
+            <section className='one-shoe-page'>
+                <OneShoeStats currShoe={secondShoe} />
+                <OneShoeDetails currShoe={secondShoe} />
+                <OneShoeSuits currShoe={secondShoe} />
+            </section>
+        )
+        //Case 3: Both shoes exist - compare page.
         || (firstShoe && secondShoe) && (
             <section className='two-shoe-page'>
-                <OneShoeStats currShoe={firstShoe} />
-                <OneShoeStats currShoe={secondShoe} />
+                <OneShoeStats className='first-shoe' currShoe={firstShoe} />
+                <OneShoeStats className='second-shoe' currShoe={secondShoe} />
             </section>
         )
     )
-
-
-
 }
 
 {/* Paste RFID CODE HERE:

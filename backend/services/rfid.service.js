@@ -29,7 +29,7 @@ function readFirstRfid() {
 
 function readSecondRfid() {
     const secondPort = new SerialPort({
-        path: '/COM7',
+        path: '/COM8',
         baudRate: 9600
     })
     let buffer = Buffer.alloc(0)
