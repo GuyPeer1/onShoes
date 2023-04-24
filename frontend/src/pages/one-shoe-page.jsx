@@ -11,7 +11,6 @@ export function OneShoePage() {
     const [data, setData] = useState()
     const [firstRfid, setFirstRfid] = useState('')
     const [secondRfid, setSecondRfid] = useState('')
-
     const [firstShoe, setFirstShoe] = useState(null)
     const [secondShoe, setSecondShoe] = useState(null)
 
@@ -30,35 +29,59 @@ export function OneShoePage() {
     useEffect(() => {
         if (firstRfid) {
             const shoe = dataService.getShoe(data, firstRfid)
-            setFirstShoe(shoe || null)
+            setFirstShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
         }
         if (secondRfid) {
             const shoe = dataService.getShoe(data, secondRfid)
-            console.log(shoe)
-            setSecondShoe(shoe || null)
+            setSecondShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
         }
     }, [firstRfid, secondRfid])
 
-    ///socketlistaners
     useEffect(() => {
+        let firstRfidTimer = null
+        let secondRfidTimer = null
+
+        function resetFirstRfid() {
+            setFirstRfid('')
+            setFirstShoe(null)
+            clearTimeout(firstRfidTimer)
+        }
+        
+        function resetSecondRfid() {
+            setSecondRfid('')
+            setSecondShoe(null)
+            clearTimeout(secondRfidTimer)
+        }
+
+        function handleRFIDChange(value, rfidType) {
+            if (value.length === 24) {
+                if (rfidType === 'first') {
+                    setFirstRfid(value)
+                    clearTimeout(firstRfidTimer)
+                    firstRfidTimer = setTimeout(resetFirstRfid, 3000) // Reset after 5 seconds of no events
+                }
+                else if (rfidType === 'second') {
+                    setSecondRfid(value)
+                    clearTimeout(secondRfidTimer)
+                    secondRfidTimer = setTimeout(resetSecondRfid, 3000) // Reset after 5 seconds of no events
+                }
+            }
+        }
+
         socketService.on('rfid-first', (rfidTag) => {
             handleRFIDChange(rfidTag, 'first')
-            console.log('first', rfidTag)
         })
 
         socketService.on('rfid-second', (rfidTag) => {
-            console.log('second', rfidTag)
             handleRFIDChange(rfidTag, 'second')
         })
 
+        return () => {
+            clearTimeout(firstRfidTimer)
+            clearTimeout(secondRfidTimer)
+        }
     }, [])
 
-    function handleRFIDChange(value, rfidType) {
-        if (value.length === 24) {
-            if (rfidType === 'first') setFirstRfid(value)
-            else if (rfidType === 'second') setSecondRfid(value)
-        }
-    }
     return (
         //Deafult: Display background movie
         (!firstShoe && !secondShoe) && (
@@ -82,7 +105,7 @@ export function OneShoePage() {
         )
         //Case 3: Both shoes exist - compare page.
         || (firstShoe && secondShoe) && (
-            <section className='two-shoe-page'>
+            <section className='two-shoes-page'>
                 <OneShoeStats className='first-shoe' currShoe={firstShoe} />
                 <OneShoeStats className='second-shoe' currShoe={secondShoe} />
             </section>

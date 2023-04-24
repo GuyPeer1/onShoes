@@ -1,16 +1,25 @@
-.one-shoe-stats{
+.one-shoe-stats {
     grid-column: 1;
     background-color: rgba(123, 186, 221, 0.9);
-    color:white;
+    color: white;
     border-radius: 16px;
     margin: 32px;
 
     .head {
-    padding: em(4px);
-    @media (min-width: 1600px) {
-        padding: em(8px);
-    }
-    text-align: left;
+        padding: em(4px);
+
+        @media (min-width: 1600px) {
+            padding: em(8px);
+        }
+
+        text-align: left;
     }
 
+    &.first-shoe{
+        grid-column: 1;
+    }
+
+    &.second-shoe {
+        grid-column: 2;
+    }
 }
