@@ -1,6 +1,5 @@
 const { SerialPort } = require('serialport')
 const socketService = require('./socket.service.js')
-
 function readFirstRfid() {
     const firstPort = new SerialPort({
         path: '/COM6',

@@ -3,6 +3,7 @@ import { OneShoeStats } from '../cmps/one-shoe-stats.jsx'
 import { OneShoeDetails } from '../cmps/one-shoe-details.jsx'
 import { OneShoeSuits } from '../cmps/one-shoe-suits.jsx'
 import { dataService } from '../services/data.service.js'
+import { shoeService } from '../services/shoe.service.js'
 import { socketService } from '../services/socket.service'
 import { HomePage } from "./home-page.jsx"
 
@@ -29,11 +30,12 @@ export function OneShoePage() {
     useEffect(() => {
         if (firstRfid) {
             const shoe = dataService.getShoe(data, firstRfid)
-            setFirstShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
+            if (shoe !== firstShoe) setFirstShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
         }
         if (secondRfid) {
             const shoe = dataService.getShoe(data, secondRfid)
-            setSecondShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
+            if (shoe !== secondShoe) {
+                setSecondShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)}
         }
     }, [firstRfid, secondRfid])
 
