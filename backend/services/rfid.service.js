@@ -1,57 +1,36 @@
 const { SerialPort } = require('serialport')
 const socketService = require('./socket.service.js')
-function readFirstRfid() {
-    const firstPort = new SerialPort({
-        path: '/COM6',
+
+const FIRST_PORT_PATH = process.env.FIRST_PORT_PATH || (process.platform === 'win32' ? '/COM6' : '/dev/ttyUSB0')
+const SECOND_PORT_PATH = process.env.SECOND_PORT_PATH || (process.platform === 'win32' ? '/COM8' : '/dev/ttyUSB1')
+
+function readRfid(path, eventType) {
+    const port = new SerialPort({
+        path,
         baudRate: 9600
-    })
+    });
     let buffer = Buffer.alloc(0)
 
-    firstPort.on('data', data => {
+    port.on('data', data => {
         buffer = Buffer.concat([buffer, data]);
 
         if (buffer.length >= 16) {
             const tag_id = buffer.slice(3, 15).toString('hex')
-            console.log(tag_id);
+            console.log(tag_id)
             buffer = Buffer.alloc(0)
+            console.log(eventType, tag_id)
 
             // Emit the RFID code via socket
-            socketService.emitTo({ type: 'rfid-first', data: tag_id })
-            console.log('first',tag_id)
-            firstPort.close(() => {
-                console.log('First Port closed')
-                readFirstRfid()
-            })
+            socketService.emitTo({ type: eventType, data: tag_id })
+
+            port.close(() => {
+                console.log(`Port ${path} closed`)
+                readRfid(path, eventType)
+            });
         }
-    })
+    });
 }
 
-function readSecondRfid() {
-    const secondPort = new SerialPort({
-        path: '/COM8',
-        baudRate: 9600
-    })
-    let buffer = Buffer.alloc(0)
-
-    secondPort.on('data', data => {
-        buffer = Buffer.concat([buffer, data]);
-
-        if (buffer.length >= 16) {
-            const tag_id = buffer.slice(3, 15).toString('hex')
-            console.log(tag_id);
-            buffer = Buffer.alloc(0)
-            console.log('second',tag_id)
-
-            // Emit the RFID code via socket
-            socketService.emitTo({ type: 'rfid-second', data: tag_id })
-
-            secondPort.close(() => {
-                console.log('Second Port closed')
-                readSecondRfid()
-            })
-        }
-    })
-}
-readFirstRfid()
-readSecondRfid()
+readRfid(FIRST_PORT_PATH, 'rfid-first')
+readRfid(SECOND_PORT_PATH, 'rfid-second')
 
