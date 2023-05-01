@@ -3,7 +3,7 @@
 echo "Starting servers..."
 
 # Change to backend directory
-cd /backend
+cd backend
 echo "Current working directory: $(pwd)"
 
 # Start backend server
