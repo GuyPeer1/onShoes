@@ -37,9 +37,15 @@ export function OneShoePage() {
     useEffect(() => {
         if (firstRfid) {
             const shoe = dataService.getShoe(shoeData, firstRfid)
+            if (!shoe[1]){
+                shoe[1] = [,':( Shoe is not available']
+            }
             if (shoe !== firstShoe) setFirstShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
         }
         if (secondRfid) {
+            if (!shoe[1]){
+                shoe[1] = [,':( Shoe is not available']
+            }
             const shoe = dataService.getShoe(shoeData, secondRfid)
             if (shoe !== secondShoe) {
                 setSecondShoe(prevShoe => ({ ...prevShoe, ...shoe }) || null)
