@@ -74,12 +74,12 @@ export function OneShoePage() {
                 if (rfidType === 'first') {
                     setFirstRfid(value)
                     clearTimeout(firstRfidTimer)
-                    firstRfidTimer = setTimeout(resetFirstRfid, 3000) // Reset after 5 seconds of no events
+                    firstRfidTimer = setTimeout(resetFirstRfid, 3000000) // Reset after 5 seconds of no events
                 }
                 else if (rfidType === 'second') {
                     setSecondRfid(value)
                     clearTimeout(secondRfidTimer)
-                    secondRfidTimer = setTimeout(resetSecondRfid, 3000) // Reset after 5 seconds of no events
+                    secondRfidTimer = setTimeout(resetSecondRfid, 30000000) // Reset after 5 seconds of no events
                 }
             }
         }
@@ -100,10 +100,12 @@ export function OneShoePage() {
 
     return (
         <>
-            {isLoading && <div>Loading...</div>}
+            {isLoading && <div>Loading Data, please wait :)</div>}
+
             {!firstShoe && !secondShoe && !isLoading && (
                 <HomePage />
             )}
+
             {firstShoe && !secondShoe && !isLoading && (
                 <section className='one-shoe-page'>
                     <MemoizedOneShoeStats currShoe={firstShoe} />
@@ -111,6 +113,7 @@ export function OneShoePage() {
                     <MemoizedOneShoeSuits currShoe={firstShoe} />
                 </section>
             )}
+
             {!firstShoe && secondShoe && !isLoading && (
                 <section className='one-shoe-page'>
                     <MemoizedOneShoeStats currShoe={secondShoe} />
@@ -118,6 +121,7 @@ export function OneShoePage() {
                     <MemoizedOneShoeSuits currShoe={secondShoe} />
                 </section>
             )}
+            
             {firstShoe && secondShoe && !isLoading && (
                 <section className='two-shoes-page'>
                     <MemoizedOneShoeStats className="first-shoe" currShoe={firstShoe} />
