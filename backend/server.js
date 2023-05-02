@@ -3,6 +3,7 @@ const cors = require('cors')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const rfidService = require('./services/rfid.service.js')
+const nexmosphereService = require('./services/nexmosphere.service.js')
 
 const app = express()
 const http = require('http').createServer(app)
