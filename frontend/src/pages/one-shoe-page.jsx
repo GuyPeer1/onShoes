@@ -79,7 +79,7 @@ export function OneShoePage() {
                 else if (rfidType === 'second') {
                     setSecondRfid(value)
                     clearTimeout(secondRfidTimer)
-                    secondRfidTimer = setTimeout(resetSecondRfid, 30000000) // Reset after 5 seconds of no events
+                    secondRfidTimer = setTimeout(resetSecondRfid, 3000000) // Reset after 5 seconds of no events
                 }
             }
         }
