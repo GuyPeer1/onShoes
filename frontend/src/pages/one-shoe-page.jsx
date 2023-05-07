@@ -23,7 +23,7 @@ export function OneShoePage() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const data = await dataService.loadData()
+                const data = await dataService.query()
                 setShoeData(data)
                 setIsLoading(false)
             } catch (error) {

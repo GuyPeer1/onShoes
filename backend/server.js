@@ -22,10 +22,14 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors(corsOptions))
 }
 
+const dataRoutes = require('./api/data/data.routes.js')
 const {setupSocketAPI} = require('./services/socket.service')
 
+// routes
+const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware.js')
+app.all('*', setupAsyncLocalStorage)
 
-
+app.use('/api/data', dataRoutes)
 setupSocketAPI(http)
 
 app.get('/**', (req, res) => {

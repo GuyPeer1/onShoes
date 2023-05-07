@@ -1,19 +1,31 @@
 
 import * as XLSX from "xlsx"
 import dataFile from '../assets/data.xlsx'
+
+import { httpService } from './http.service.js'
 import { generateBarcode } from "../services/rfid.service.js"
 
 export const dataService = {
+    query,
     loadData,
     getShoe,
     getShoeStats
+}
+
+async function query() {
+    try {
+        const data = await httpService.get('data')
+        return data
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 async function loadData() {
     try {
       const response = await fetch(dataFile)
       const blob = await response.blob()
-      const reader = new FileReader();
+      const reader = new FileReader()
       return new Promise((resolve, reject) => {
         reader.onload = (event) => {
           const binaryStr = event.target.result
