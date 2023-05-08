@@ -1,6 +1,6 @@
 export function OneShoeDetails({currShoe}) {
     const shoeInfo = currShoe.info
-    const imgUrlIndex = shoeInfo[0].indexOf('imgUrl')
+    const imgUrlIndex = shoeInfo[0].indexOf('imgPath')
     const imgUrl = shoeInfo[1][imgUrlIndex]
 
     const descIndex = shoeInfo[0].indexOf('desc')
